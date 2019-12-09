@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bola</title>
+    <meta name="description" content="Sumbmission 2 PWA - Live Score Footbal" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Register Web Apps Manifest -->
+    <meta name="theme-color" content="#00897B" />
+    <link rel="manifest" href="manifest.json" />
+    <!-- End Register Web Apps Manifest -->
+
+    <link rel="stylesheet" href="css/materialize.min.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- navigasi -->
+    <nav class="green darken-3" role="navigation">
+      <div class="nav-wrapper">
+        <a
+          href="#"
+          class="brand-logo"
+          id="logo-container"
+          style="padding-left: 20px;"
+          >Bola</a
+        >
+        <a href="#" class="sidenav-trigger" data-target="nav-mobile">☰</a>
+        <ul class="topnav right hide-on-med-and-down"></ul>
+        <ul class="sidenav" id="nav-mobile"></ul>
+      </div>
+    </nav>
+    <!-- Akhir Navigasi -->
+
+    <!-- content start    -->
+
+    <div class="container" id="body-content"></div>
+
+    <!-- content end    -->
+
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/nav.js"></script>
+    <script type="text/javascript" src="js/api.js"></script>
+    <script type="text/javascript" src="js/idb.js"></script>
+    <script type="text/javascript" src="js/db-controller.js"></script>
+  </body>
+</html>

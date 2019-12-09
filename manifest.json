@@ -1,0 +1,17 @@
+{
+    "name": "Bola Information",
+    "short_name": "Bola",
+    "description": "Aplikasi PWA Bola",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#00897B",
+    "theme_color": "#00897B",
+    "icons": [
+        {
+            "src": "/img/soccer-ball.png",
+            "sizes": "512x512",
+            "type": "image/png"
+            
+        }
+    ]
+}
