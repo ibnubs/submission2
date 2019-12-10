@@ -1,6 +1,6 @@
 var dbPromised = idb.open('bola_database', 1, upgradeDb => {
     if (!upgradeDb.objectStoreNames.contains('teams')) {
-        upgradeDb.createObjectStore('teams',{autoIncremenet:true});
+        upgradeDb.createObjectStore('teams',{keyPath: 'id'});
     }
 });
 
@@ -21,15 +21,15 @@ var dbGetFavTeams = () => {
 }
 
 var insertFavTeam = team => {
-    return new Promise((resole,reject)=>{
+    return new Promise((resolve,reject)=>{
         dbPromised.then(db => {
             var trx = db.transaction('teams', `readwrite`);
             trx.objectStore('teams').add(team);
             return trx  
         }).then(trx => {
             if (trx.complete){
-                M.toast({html: `${team.name} berhasil disimpan`})
-                console.log.log('Team berhasil disimpan');
+                M.toast({html: `${team} berhasil disimpan`})
+                console.log('Team berhasil disimpan');
                 resolve(true)
             } else {
                 console.error('Team gagal disimpan', err);

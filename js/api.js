@@ -204,7 +204,7 @@ function teamsToHtml(data) {
           </a>
         </td>
         <td>
-        <button class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam()">Add to Favorit</button>
+        <button class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam('${team.name}','${team.id}')">Add</button>
         </td>
       </tr>
     `;
@@ -233,7 +233,7 @@ function teamsToHtml(data) {
 
 
 function favTeamToHtml(data) {
-  var teams = "";
+  var teamsFav = "";
   var favTeamElement = document.getElementById("viewFavoritTeams");
 
 
@@ -251,10 +251,16 @@ function favTeamToHtml(data) {
           </tr>
        </thead>
       <tbody id='teams'>
-          ${teams}
+          ${teamsFav}
       </tbody>
   </table>
 </div>
 `;
 
 }
+
+
+
+
+// indexdb
+

@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (page === "teams") {
           content.innerHTML = xhttp.responseText;
             getTeams();
-        } else if (page === "favorits") {
+        } else if (page === "favorit") {
           getFavTeams();
         }
 
