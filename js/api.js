@@ -204,7 +204,7 @@ function teamsToHtml(data) {
           </a>
         </td>
         <td>
-        <button class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam('${team.name}','${team.id}')">Add</button>
+        <a class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam('${team.name}','${team.id}')"> <i class="small material-icons">ADD</i></a>        
         </td>
       </tr>
     `;
@@ -264,3 +264,39 @@ function favTeamToHtml(data) {
 
 // indexdb
 
+document.addEventListener('DOMContentLoaded',function (){
+  var item = getFavTeamsById();
+
+  var papTeams = document.getElementById('papTeams');
+  papTeams.onclik = () => {
+    console.log('Tombol add di klik');
+    item.then(function(tim)  {
+      saveTeam(tim)
+    });
+  }
+});
+
+
+function getFavTeamsById(){
+  return new Promise(function (resolve,reject) {
+    var urlParams = new URLSearchParams(window.location.search);
+    var idParam = urlParams.get('id');
+
+    if ('caches' in window) {
+        caches.match(baseUrl + '/teams/' + idParam)
+        .then(response => {
+          if (response) {
+            response.json().then(data =>{
+              console.dir("Teams Data " + data);
+
+              document.getElementById('papTeams') = timHTML
+              resolve(data)
+
+
+            });
+          }
+        })
+    }
+    
+  })
+}

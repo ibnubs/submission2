@@ -42,7 +42,7 @@ self.addEventListener('fetch', event => {
     var baseUrl = 'https://api.football-data.org/v2/';
     if (event.request.url.indexOf(baseUrl) > -1 ) {
         event.respondWith(
-            caches.match(event.request).then(function (response) {
+            caches.match(event.request).then( (response) => {
                 console.log('ServiceWorker: Menarik data: ', event.request.url);
                 if (response) {
                     console.log('ServiceWorker: Gunakan aset dari cache: ', response.url);
@@ -58,6 +58,8 @@ self.addEventListener('fetch', event => {
     }
 
 });
+
+
 
 // Function digunakan untuk mendelete chace jika dilakukan update
 

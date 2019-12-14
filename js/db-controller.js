@@ -1,7 +1,15 @@
-var dbPromised = idb.open('bola_database', 1, upgradeDb => {
-    if (!upgradeDb.objectStoreNames.contains('teams')) {
-        upgradeDb.createObjectStore('teams',{keyPath: 'id'});
-    }
+// var dbPromised = idb.open('bola_database', 1, upgradeDb => {
+//     if (!upgradeDb.objectStoreNames.contains('teams')) {
+//         upgradeDb.createObjectStore('teams',{keyPath: 'id'});
+//     }
+// });
+
+var dbPromised = idb.open('bola_database', 1, (upgradeDb) => {
+    var objectStoreNames = upgradeDb.createObjectStore('teams',{keyPath: 'id'
+    });
+    objectStoreNames.createIndex('teams.name','teams.name',{
+        unique:false
+    });
 });
 
 
@@ -25,6 +33,7 @@ var insertFavTeam = team => {
         dbPromised.then(db => {
             var trx = db.transaction('teams', `readwrite`);
             trx.objectStore('teams').add(team);
+            console.log( "hasil klik save: " + team)
             return trx  
         }).then(trx => {
             if (trx.complete){
@@ -38,6 +47,24 @@ var insertFavTeam = team => {
         })
     })
 };
+
+//temp save
+function saveTeam(tim) {
+    dbPromised
+    .then(function (db) {
+        var trx = db.transaction('teams', `readwrite`);
+        var store = trx.objectStore('teams');
+        console.log(tim);
+        store.add(tim.result);
+        return trx.complete;
+    })
+    .then(function () {
+        console.log('Artikel berhasil disimpan')
+    });
+}
+
+
+
 
 
 var deleteFavTeam = (teamId) => {
