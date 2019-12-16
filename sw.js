@@ -7,11 +7,10 @@ var urlsToCache = [
     '/manifest.json',
     '/js/api.js',
     '/js/nav.js',
-    '/js/script.js',
-    '/js/materialize.js',
+    '/js/materialize.min.js',
     '/js/materialize.min.js',
     '/js/idb.js',
-    'js/db-controller.js',
+    '/js/db-controller.js',
     '/img/propic.jpg',
     '/img/notif.png',
     '/img/soccer-ball.png',
@@ -26,7 +25,6 @@ var urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
-    self.skipWaiting();
     console.log('ServiceWorker: Menginstall..');
     event.waitUntil(
         caches.open(CACHE_NAME).then( cache => {
@@ -34,6 +32,7 @@ self.addEventListener('install', event => {
             return cache.addAll(urlsToCache);
         })
     );
+    return self.skipWaiting();
 });
 
 
@@ -69,6 +68,7 @@ self.addEventListener('activate',event => {
             return Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_NAME) {
+                        console.log('on active')
                         console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
                         return caches.delete(cacheName);
                     }
@@ -76,6 +76,7 @@ self.addEventListener('activate',event => {
             );
         })
     );
+    return self.clients.claim();
 });
 
 

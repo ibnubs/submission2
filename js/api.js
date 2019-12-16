@@ -68,19 +68,6 @@ function getStandings() {
     });
 }
 
-function getMatches() {
-  fetchApi(matchUrl);
-  then(status)
-    .then(json)
-    .then(data => {
-      console.log(data);
-      matchToHTML(data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
-
 function getTeams() {
   if ("caches" in window) {
     caches.match(teamUrl).then(res => {
@@ -104,29 +91,31 @@ function getTeams() {
     });
 }
 
+// Matikan dulu 
+// function getFavTeams() {
+//   if ("caches" in window) {
+//     caches.match(teamUrl).then(res => {
+//       if(res) {
+//         res.json().then(data =>{
+//           console.dir("Teams Data " + data);
+//           favTeamsToHtml(data)
+//         });
+//       }
+//     });
+//   }
+//   fetchApi(teamUrl)
+//     .then(status)
+//     .then(json)
+//     .then(data => {
+//       console.log(data);
+//       favTeamsToHtml(data);
+//     })
+//     .catch(error => {
+//       console.log(error);
+//     });
+// }
 
-function getFavTeams() {
-  if ("caches" in window) {
-    caches.match(teamUrl).then(res => {
-      if(res) {
-        res.json().then(data =>{
-          console.dir("Teams Data " + data);
-          favTeamsToHtml(data)
-        });
-      }
-    });
-  }
-  fetchApi(teamUrl)
-    .then(status)
-    .then(json)
-    .then(data => {
-      console.log(data);
-      favTeamsToHtml(data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
+
 
 //Tampil di HTML
 
@@ -180,6 +169,7 @@ function standingsToHtml(data) {
 
 
 function teamsToHtml(data) {
+  
   var teams = "";
   var teamsElement = document.getElementById("viewTeams");
 
@@ -204,11 +194,13 @@ function teamsToHtml(data) {
           </a>
         </td>
         <td>
-        <a class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam('${team.name}','${team.id}')"> <i class="small material-icons">ADD</i></a>        
+        <a class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam('${team.id}')"> <i class="small material-icons">ADD</i></a>
+                
         </td>
       </tr>
     `;
   });
+  console.log(insertFavTeam)
 
   teamsElement.innerHTML = 
   `<div class='card' style='padding-left: 24px; padding-right: 24px; margin-top: 30px;'>
@@ -232,71 +224,47 @@ function teamsToHtml(data) {
 
 
 
-function favTeamToHtml(data) {
-  var teamsFav = "";
-  var favTeamElement = document.getElementById("viewFavoritTeams");
+// function favTeamToHtml(data) {
+//   var teamsFav = "";
+//   var favTeamElement = document.getElementById("viewFavoritTeams");
 
 
 
-  favTeamElement.innerHTML = 
-  `<div class='card' style='padding-left: 24px; padding-right: 24px; margin-top: 30px;'>
-  <table class='striped responsive-table'>
-      <thead>
-          <tr>
-              <th>Team Logo</th>
-              <th>Team Name</th>
-              <th>Team Area</th>
-              <th>Team Web</th>
-              <th>Team Favorit</th>
-          </tr>
-       </thead>
-      <tbody id='teams'>
-          ${teamsFav}
-      </tbody>
-  </table>
-</div>
-`;
+//   favTeamElement.innerHTML = 
+//   `<div class='card' style='padding-left: 24px; padding-right: 24px; margin-top: 30px;'>
+//   <table class='striped responsive-table'>
+//       <thead>
+//           <tr>
+//               <th>Team Logo</th>
+//               <th>Team Name</th>
+//               <th>Team Area</th>
+//               <th>Team Web</th>
+//               <th>Team Favorit</th>
+//           </tr>
+//        </thead>
+//       <tbody id='teams'>
+//           ${teamsFav}
+//       </tbody>
+//   </table>
+// </div>
+// `;
 
-}
+// }
 
 
 
 
 // indexdb
 
-document.addEventListener('DOMContentLoaded',function (){
-  var item = getFavTeamsById();
+//matikan dulu
+// document.addEventListener('DOMContentLoaded',function (){
+//   var item = getFavTeamsById();
 
-  var papTeams = document.getElementById('papTeams');
-  papTeams.onclik = () => {
-    console.log('Tombol add di klik');
-    item.then(function(tim)  {
-      saveTeam(tim)
-    });
-  }
-});
-
-
-function getFavTeamsById(){
-  return new Promise(function (resolve,reject) {
-    var urlParams = new URLSearchParams(window.location.search);
-    var idParam = urlParams.get('id');
-
-    if ('caches' in window) {
-        caches.match(baseUrl + '/teams/' + idParam)
-        .then(response => {
-          if (response) {
-            response.json().then(data =>{
-              console.dir("Teams Data " + data);
-
-              document.getElementById('papTeams') = timHTML
-              resolve(data)
-
-
-            });
-          }
-        })
-    }
-    
-  })
-}
+//   var papTeams = document.getElementById('papTeams');
+//   papTeams.onclik = () => {
+//     console.log('Tombol add di klik');
+//     item.then(function(tim)  {
+//       saveTeam(tim)
+//     });
+//   }
+// });

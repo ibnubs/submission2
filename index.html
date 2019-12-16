@@ -42,12 +42,26 @@
     <!-- content end    -->
 
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
     <script type="text/javascript" src="js/nav.js"></script>
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript" src="js/idb.js"></script>
     <script type="text/javascript" src="js/db-controller.js"></script>
-    
-
+    <script>
+      // REGISTER SERVICE WORKER
+      if (!("serviceWorker" in navigator)) {
+        console.error("ServiceWorker: Dosn't Support your browser.");
+      } else {
+        navigator.serviceWorker.register("/sw.js")
+          .then(registration => {
+            console.log(
+              "Registration service worker done:",
+              registration.scope
+            );
+          })
+          .catch(err => {
+            coconsole.log("Registration service worker failed ", err);
+          });
+      }
+    </script>
   </body>
 </html>
