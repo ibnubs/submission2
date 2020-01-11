@@ -51,6 +51,7 @@ function error(error) {
 //Request Standings
 function getStandings() {
   if ("caches" in window) {
+    console.log(standingUrl + ' test');
     caches.match(standingUrl).then(response => {
       if (response) {
         response.json().then(data => {
