@@ -1,3 +1,4 @@
+var timData
 //Fetch API with JSON.
 
 //Inisiasi variabel
@@ -9,6 +10,7 @@ var teamUrl = `${baseUrl}competitions/${idLeague}/teams`;
 var standingUrl = `${baseUrl}competitions/${idLeague}/standings?standingType=TOTAL`;
 var matchUrl = `${baseUrl}competitions/${idLeague}/matches`;
 
+
 //fetch header api
 var fetchApi = url => {
   return fetch(url, {
@@ -19,6 +21,8 @@ var fetchApi = url => {
     }
   });
 };
+
+
 
 //kode yang memeriksa fetch berhasil
 function status(response) {
@@ -84,6 +88,7 @@ function getTeams() {
     .then(json)
     .then(data => {
       console.log(data);
+      timData=data
       teamsToHtml(data);
     })
     .catch(error => {
@@ -91,31 +96,120 @@ function getTeams() {
     });
 }
 
-// Matikan dulu 
-// function getFavTeams() {
-//   if ("caches" in window) {
-//     caches.match(teamUrl).then(res => {
-//       if(res) {
-//         res.json().then(data =>{
-//           console.dir("Teams Data " + data);
-//           favTeamsToHtml(data)
-//         });
-//       }
-//     });
-//   }
-//   fetchApi(teamUrl)
-//     .then(status)
-//     .then(json)
-//     .then(data => {
-//       console.log(data);
-//       favTeamsToHtml(data);
-//     })
-//     .catch(error => {
-//       console.log(error);
-//     });
-// }
+
+//Eventlistener
+var saveFavorit = teamId => {
+    var team = timData.teams.filter(el => el.id == teamId)[0]
+    insertTeam(team)
+}
+
+var deleteFavTeam = teamId => {
+    var pushconf = confirm ('anda yakin hapus?')
+    if (pushconf == true){
+      deleteTim(teamId)
+    }
+}
 
 
+//Database
+var insertTeam = (team) => {
+    dbPromised.then(db => {
+      var tx = db.transaction('team_favorit', 'readwrite');
+      var store = tx.objectStore('team_favorit');
+      store.put(team, team.id);
+      return tx.complete;
+    }).then(()=>{
+      M.toast({html: `${team.name} add to favorit`});
+      console.log('team berhasil disimpan ke favorit');
+    }).catch( err =>{
+      console.log('team gagal disimpan', err);
+    });
+}
+
+
+var favTeamToHtml = () => {
+  return dbPromised.then(db => {
+    var tx = db.transaction('team_favorit', 'readonly');
+    var store = tx.objectStore('team_favorit');
+    return store.getAll()
+  }).then((team)=>{
+    console.log('load page data favorit sukses')
+    console.log(team);
+    var teamFav=''
+    var teamsFavElement = document.getElementById("loadFav");
+    team.forEach(tim => {
+      teamFav += `
+        <tr>
+          <td>
+            <img
+              src='${tim.crestUrl.replace(
+                        /^http:\/\//i,
+                        "https://"
+                      )}'
+              width="30px"
+              alt="badge"
+            />
+          </td>
+          <td>${tim.name}</td>
+        <td>${tim.area.name}</td>
+        <td>
+          <a href="${tim.website}" target="_blank">
+            ${tim.website}
+          </a>
+        </td>
+        <td>
+        <a class="btn-small waves-effect waves-light red" type="submit" onclick="deleteFavTeam(${tim.id})"> <i class="small material-icons">DEL</i></a>
+                
+        </td>
+        </tr>
+      `;
+    });
+
+    teamsFavElement.innerHTML = 
+    `<div class='card' style='padding-left: 24px; padding-right: 24px; margin-top: 30px;'>
+    <table class='striped responsive-table'>
+        <thead>
+            <tr>
+                <th>Team Logo</th>
+                <th>Team Name</th>
+                <th>Team Area</th>
+                <th>Team Web</th>
+                <th>Team Favorit</th>
+            </tr>
+         </thead>
+        <tbody id='teamFav'>
+            ${teamFav}
+        </tbody>
+    </table>
+  </div>
+  <div>
+  </div>
+  `;
+    
+  }).catch(()=>{
+    console.log(('load page favorit failed'))
+  })
+}
+
+
+var deleteTim = (teamId) => {
+  console.log(teamId);
+  dbPromised.then(db => {
+    var tx = db.transaction('team_favorit', 'readwrite');
+    var store = tx.objectStore('team_favorit');
+    store.delete(teamId);
+    return tx.complete;
+  }).then(()=>{
+    M.toast({html: `berhasil dihapus`});
+    location.reload();
+  }).catch(err => {
+    console.log('gagal delete', err)
+  })
+}
+
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
 //Tampil di HTML
 
@@ -170,6 +264,7 @@ function standingsToHtml(data) {
 
 function teamsToHtml(data) {
   
+  timData = data
   var teams = "";
   var teamsElement = document.getElementById("viewTeams");
 
@@ -194,13 +289,13 @@ function teamsToHtml(data) {
           </a>
         </td>
         <td>
-        <a class="btn-small waves-effect waves-light green" type="submit" onclick="insertFavTeam('${team.id}')"> <i class="small material-icons">ADD</i></a>
+        <a class="btn-small waves-effect waves-light green" type="submit" onclick="saveFavorit(${team.id})"> <i class="small material-icons">ADD</i></a>
                 
         </td>
       </tr>
     `;
   });
-  console.log(insertFavTeam)
+  
 
   teamsElement.innerHTML = 
   `<div class='card' style='padding-left: 24px; padding-right: 24px; margin-top: 30px;'>
@@ -219,52 +314,9 @@ function teamsToHtml(data) {
       </tbody>
   </table>
 </div>
+<div>
+</div>
 `;
 }
 
 
-
-// function favTeamToHtml(data) {
-//   var teamsFav = "";
-//   var favTeamElement = document.getElementById("viewFavoritTeams");
-
-
-
-//   favTeamElement.innerHTML = 
-//   `<div class='card' style='padding-left: 24px; padding-right: 24px; margin-top: 30px;'>
-//   <table class='striped responsive-table'>
-//       <thead>
-//           <tr>
-//               <th>Team Logo</th>
-//               <th>Team Name</th>
-//               <th>Team Area</th>
-//               <th>Team Web</th>
-//               <th>Team Favorit</th>
-//           </tr>
-//        </thead>
-//       <tbody id='teams'>
-//           ${teamsFav}
-//       </tbody>
-//   </table>
-// </div>
-// `;
-
-// }
-
-
-
-
-// indexdb
-
-//matikan dulu
-// document.addEventListener('DOMContentLoaded',function (){
-//   var item = getFavTeamsById();
-
-//   var papTeams = document.getElementById('papTeams');
-//   papTeams.onclik = () => {
-//     console.log('Tombol add di klik');
-//     item.then(function(tim)  {
-//       saveTeam(tim)
-//     });
-//   }
-// });

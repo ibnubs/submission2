@@ -1,11 +1,12 @@
-var CACHE_NAME = 'BOLAV1';
+var CACHE_NAME = "bolav";
 
 var urlsToCache = [
-    '/', 
-    '/index.html',
+    "/", 
+    "/index.html",
     '/nav.html',
     '/manifest.json',
     '/js/api.js',
+    '/js/main.js',
     '/js/nav.js',
     '/js/materialize.min.js',
     '/js/materialize.min.js',
@@ -24,61 +25,77 @@ var urlsToCache = [
 
 ];
 
-self.addEventListener('install', event => {
-    console.log('ServiceWorker: Menginstall..');
+self.addEventListener("install", function(event) {
+    console.log("ServiceWorker: Menginstall..");
+   
     event.waitUntil(
-        caches.open(CACHE_NAME).then( cache => {
-            console.log('ServiceWorker: Membuka cache..');
-            return cache.addAll(urlsToCache);
-        })
+      caches.open(CACHE_NAME).then(function(cache) {
+        console.log("ServiceWorker: Membuka cache..");
+        return cache.addAll(urlsToCache);
+      })
     );
-    return self.skipWaiting();
-});
-
-
-// fungsi untuk menggunakan aset dari cache agar bisa digunakan offline
-self.addEventListener('fetch', event => {
-    var baseUrl = 'https://api.football-data.org/v2/';
-    if (event.request.url.indexOf(baseUrl) > -1 ) {
-        event.respondWith(
-            caches.match(event.request).then( (response) => {
-                console.log('ServiceWorker: Menarik data: ', event.request.url);
-                if (response) {
-                    console.log('ServiceWorker: Gunakan aset dari cache: ', response.url);
-                    return response;
-                }
-                console.log(
-                    'ServiceWorker: Memuat aset dari server: ',
-                    event.request.url
-                );
-                return fetch(event.request);
-            })
-        );        
-    }
-
-});
+  });
 
 
 
-// Function digunakan untuk mendelete chace jika dilakukan update
 
-self.addEventListener('activate',event => {
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('on active')
-                        console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
-    return self.clients.claim();
-});
+// self.addEventListener('install', event => {
+//     console.log('ServiceWorker: Menginstall..');
+//     event.waitUntil(
+//         caches.open(CACHE_NAME).then( cache => {
+//             console.log('ServiceWorker: Membuka cache..');
+//             return cache.addAll(urlsToCache);
+//         })
+//     );
+//     return self.skipWaiting();
+// });
 
+
+// // fungsi untuk menggunakan aset dari cache agar bisa digunakan offline
+// self.addEventListener('fetch', event => {
+//     var baseUrl = 'https://api.football-data.org/v2/';
+//     if (event.request.url.indexOf(baseUrl) > -1 ) {
+//         event.respondWith(
+//             caches.match(event.request).then( (response) => {
+//                 console.log('ServiceWorker: Menarik data: ', event.request.url);
+//                 if (response) {
+//                     console.log('ServiceWorker: Gunakan aset dari cache: ', response.url);
+//                     return response;
+//                 }
+//                 console.log(
+//                     'ServiceWorker: Memuat aset dari server: ',
+//                     event.request.url
+//                 );
+//                 return fetch(event.request);
+//             })
+//         );        
+//     }
+
+// });
+
+
+
+// // Function digunakan untuk mendelete chace jika dilakukan update
+
+// self.addEventListener('activate',event => {
+//     event.waitUntil(
+//         caches.keys().then(cacheNames => {
+//             return Promise.all(
+//                 cacheNames.map(cacheName => {
+//                     if (cacheName !== CACHE_NAME) {
+//                         console.log('on active')
+//                         console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
+//                         return caches.delete(cacheName);
+//                     }
+//                 })
+//             );
+//         })
+//     );
+//     return self.clients.claim();
+// });
+
+
+// self.addEventListener('')
 
 // self.addEventListener('push', event => {
 //     var body;
