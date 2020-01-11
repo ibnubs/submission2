@@ -4,8 +4,8 @@ var timData
 //Inisiasi variabel
 const apiToken = "52e671c86c404fac9a956a398c9eec75";
 const idLeague = 2002;
-var nameLeague = "BL1";
-var baseUrl = "https://api.football-data.org/v2/";
+const nameLeague = "BL1";
+const baseUrl = "https://api.football-data.org/v2/";
 var teamUrl = `${baseUrl}competitions/${idLeague}/teams`;
 var standingUrl = `${baseUrl}competitions/${idLeague}/standings?standingType=TOTAL`;
 var matchUrl = `${baseUrl}competitions/${idLeague}/matches`;

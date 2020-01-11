@@ -12,6 +12,11 @@
             "sizes": "512x512",
             "type": "image/png"
             
+        },
+        {
+            "src": "/img/soccer-ball.png",
+            "sizes": "192x192",
+            "type": "image/png"
         }
     ],
     "gcm_sender_id": "857316600947"
