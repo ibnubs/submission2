@@ -2,7 +2,7 @@ if (!("serviceWorker" in navigator)) {
     console.error("ServiceWorker: Browser tidak mendukung.");
   } else {
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("../sw.js")
       .then(function(registration) {
         console.log(
           "ServiceWorker: Pendaftaran berhasil. Scope:",
